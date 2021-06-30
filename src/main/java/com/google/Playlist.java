@@ -32,6 +32,11 @@ public class Playlist {
         this.videos.remove(video);
     }
 
+    public void removeAllVideos() {
+        videos.clear();
+    }
+
+
     public void printVideos() {
 
         if (videos.isEmpty()) {

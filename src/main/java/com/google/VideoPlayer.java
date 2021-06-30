@@ -342,7 +342,16 @@ public class VideoPlayer {
 
     System.out.println("Showing all playlists:");
 
-    for (Playlist playlist : playlists) {
+    ArrayList<Playlist> sortedPlaylists = new ArrayList<Playlist>(playlists);
+
+    Collections.sort(sortedPlaylists, new Comparator<Playlist>() {
+      @Override
+      public int compare(Playlist p1, Playlist p2) {
+        return p1.getName().compareTo(p2.getName());
+      }
+    });
+
+    for (Playlist playlist : sortedPlaylists) {
       System.out.println(playlist.getName());
     }
 
@@ -351,12 +360,12 @@ public class VideoPlayer {
   public void showPlaylist(String playlistName) {
 
     if (!playlistExists(playlistName)) {
-      System.out.println("Cannot show " + playlistName + ": Playlist does not exist");
+      System.out.print("Cannot show playlist " + playlistName + ": Playlist does not exist");
       return;
     }
 
     Playlist playlistToShow = getPlaylistByName(playlistName);
-    System.out.println("Showing playlist: " + playlistToShow.getName());
+    System.out.println("Showing playlist: " + playlistName);
     playlistToShow.printVideos();
 
   }
@@ -367,8 +376,12 @@ public class VideoPlayer {
   public void removeFromPlaylist(String playlistName, String videoId) {
     List<Video> videos = videoLibrary.getVideos();
 
+    if (!playlistExists(playlistName)) {
+      System.out.println("Cannot remove video from " + playlistName + ": Playlist does not exist");
+      return;
+    }
 
-    if (!(videoExists(videos, videoId))) {
+    if (!videoExists(videos, videoId)) {
       System.out.println("Cannot remove video from " + playlistName + ": Video does not exist");
       return;
     }
@@ -378,14 +391,9 @@ public class VideoPlayer {
       return;
     }
 
-    if (!playlistExists(playlistName)) {
-      System.out.println("Cannot remove video from " + playlistName + ": Playlist does not exist");
-      return;
-    }
-
     Playlist playlistToRemoveFrom = getPlaylistByName(playlistName);
     playlistToRemoveFrom.removeVideo(videoLibrary.getVideo(videoId));
-    System.out.println("Removed video from " + playlistName + ": " + playlistToRemoveFrom.getName());
+    System.out.println("Removed video from " + playlistName + ": " + videoLibrary.getVideo(videoId).getTitle());
 
   }
 
@@ -395,11 +403,34 @@ public class VideoPlayer {
 
 
   public void clearPlaylist(String playlistName) {
-    System.out.println("clearPlaylist needs implementation");
+
+    if (!playlistExists(playlistName)) {
+      System.out.println("Cannot clear playlist " + playlistName + ": Playlist does not exist");
+      return;
+    }
+
+    Playlist playlistToClear = getPlaylistByName(playlistName);
+    playlistToClear.removeAllVideos();
+
+    System.out.println("Successfully removed all videos from " + playlistName);
+
   }
 
+
+
+
   public void deletePlaylist(String playlistName) {
-    System.out.println("deletePlaylist needs implementation");
+
+    if (!playlistExists(playlistName)) {
+      System.out.println("Cannot delete playlist " + playlistName + ": Playlist does not exist");
+      return;
+    }
+
+    Playlist playlistToDelete = getPlaylistByName(playlistName);
+
+    playlists.remove(playlistToDelete);
+    System.out.println("Deleted playlist: " + playlistName);
+
   }
 
   public void searchVideos(String searchTerm) {
