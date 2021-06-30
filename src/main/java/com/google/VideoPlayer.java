@@ -339,7 +339,18 @@ public class VideoPlayer {
   }
 
   public void showAllPlaylists() {
-    System.out.println("showAllPlaylists needs implementation");
+
+    if (playlists.size() == 0) {
+      System.out.println("No playlists exist yet");
+      return;
+    }
+
+    System.out.println("Showing all playlists:");
+
+    for (Playlist playlist : playlists) {
+      System.out.println(playlist.getName());
+    }
+
   }
 
   public void showPlaylist(String playlistName) {
