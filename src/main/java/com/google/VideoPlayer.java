@@ -1,6 +1,7 @@
 package com.google;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class VideoPlayer {
 
@@ -10,19 +11,33 @@ public class VideoPlayer {
     this.videoLibrary = new VideoLibrary();
   }
 
-  private boolean containsId(final List<Video> list, final String id){
-    return list.stream().map(Video::getVideoId).filter(id::equals).findFirst().isPresent();
+  private static boolean containsId(final List<Video> videos, final String id){
+    return videos.stream()
+            .map(Video::getVideoId)
+            .filter(id::equals)
+            .findFirst()
+            .isPresent();
   }
 
   private static Video getRandomVideo(List<Video> videos) {
     return videos.get(new Random().nextInt(videos.size()));
   }
 
+  private static Video getCurrentlyPlayingVideo(List<Video> videos) {
+
+    Video returnVal = null;
+
+    for (Video video : videos) {
+      if (video.isPlaying()) {
+        returnVal = video;
+      }
+    }
+    return returnVal;
+  }
+
   public void numberOfVideos() {
     System.out.printf("%s videos in the library%n", videoLibrary.getVideos().size());
   }
-
-
 
   public void showAllVideos() {
     List<Video> videos = videoLibrary.getVideos();
@@ -111,10 +126,10 @@ public class VideoPlayer {
       }
     }
 
-    Video v1 = getRandomVideo(videos);
+    Video randomVideo = getRandomVideo(videos);
 
-    System.out.println("Playing video: " + v1.getTitle());
-    v1.startPlaying();
+    System.out.println("Playing video: " + randomVideo.getTitle());
+    randomVideo.startPlaying();
   }
 
 
@@ -148,7 +163,34 @@ public class VideoPlayer {
   }
 
   public void continueVideo() {
-    System.out.println("continueVideo needs implementation");
+    List<Video> videos = videoLibrary.getVideos();
+
+    int noVideosNotPlaying = 0;
+
+    for(Video video : videos) {
+      if (!video.isPlaying()) {
+        noVideosNotPlaying += 1;
+      }
+    }
+
+    if (noVideosNotPlaying == videos.size()) {
+      System.out.println("Cannot continue video: No video is currently playing");
+      return;
+    }
+
+    Video currentlyPlayingVideo = getCurrentlyPlayingVideo(videos);
+
+    if (!currentlyPlayingVideo.isPaused()) {
+      System.out.println("Cannot continue video: Video is not paused");
+      return;
+    }
+
+    if (currentlyPlayingVideo.isPaused()) {
+      System.out.println("Continuing video: " + currentlyPlayingVideo.getTitle());
+      currentlyPlayingVideo.unPause();
+      return;
+    }
+
   }
 
   public void showPlaying() {
