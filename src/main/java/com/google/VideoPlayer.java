@@ -39,6 +39,9 @@ public class VideoPlayer {
     System.out.printf("%s videos in the library%n", videoLibrary.getVideos().size());
   }
 
+
+
+
   public void showAllVideos() {
     List<Video> videos = videoLibrary.getVideos();
 
@@ -51,8 +54,18 @@ public class VideoPlayer {
 
     for(Video video : videos) {
       System.out.print(video.getTitle() + " ");
-      System.out.print("(" + video.getVideoId() + ") ");
-      System.out.print(video.getTags());
+      System.out.print("(" + video.getVideoId() + ") [");
+
+      for (int i = 0; i < video.getTags().size(); i++) {
+
+        if (i != video.getTags().size() - 1) {
+          System.out.print(video.getTags().get(i) + " ");
+        } else if (i == video.getTags().size() - 1) {
+          System.out.print(video.getTags().get(i));
+        }
+      }
+
+      System.out.print("]");
       System.out.println();
     }
   }
@@ -194,7 +207,30 @@ public class VideoPlayer {
   }
 
   public void showPlaying() {
-    System.out.println("showPlaying needs implementation");
+    List<Video> videos = videoLibrary.getVideos();
+
+    Video currentlyPlayingVideo = getCurrentlyPlayingVideo(videos);
+
+    if (currentlyPlayingVideo.isPaused()) {
+      System.out.print("Currently playing: " + currentlyPlayingVideo.getTitle() + " "
+                          + "(" + currentlyPlayingVideo.getVideoId() + ") ");
+
+      currentlyPlayingVideo.printTags();
+
+      System.out.println(" - PAUSED");
+
+
+    } else if (!currentlyPlayingVideo.isPaused()) {
+
+      System.out.print("Currently playing: " + currentlyPlayingVideo.getTitle() + " "
+              + "(" + currentlyPlayingVideo.getVideoId() + ") ");
+
+      currentlyPlayingVideo.printTags();
+
+      System.out.println();
+
+    }
+
   }
 
   public void createPlaylist(String playlistName) {

@@ -69,4 +69,19 @@ class Video {
     this.isPaused = false;
   }
 
+  public void printTags() {
+    System.out.print("[");
+
+    for (int i = 0; i < this.getTags().size(); i++) {
+
+      if (i != this.getTags().size() - 1) {
+        System.out.print(this.getTags().get(i) + " ");
+      } else if (i == this.getTags().size() - 1) {
+        System.out.print(this.getTags().get(i));
+      }
+    }
+
+    System.out.print("]");
+  }
+
 }
