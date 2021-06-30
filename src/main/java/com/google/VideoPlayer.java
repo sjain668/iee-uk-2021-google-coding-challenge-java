@@ -354,8 +354,20 @@ public class VideoPlayer {
   }
 
   public void showPlaylist(String playlistName) {
-    System.out.println("showPlaylist needs implementation");
+
+    if (!playlistExists(playlistName)) {
+      System.out.println("Cannot show " + playlistName + ": Playlist does not exist");
+      return;
+    }
+
+    Playlist playlistToShow = getPlaylistByName(playlistName);
+    System.out.println("Showing playlist: " + playlistToShow.getName());
+    playlistToShow.printVideos();
+
   }
+
+
+
 
   public void removeFromPlaylist(String playlistName, String videoId) {
     System.out.println("removeFromPlaylist needs implementation");
