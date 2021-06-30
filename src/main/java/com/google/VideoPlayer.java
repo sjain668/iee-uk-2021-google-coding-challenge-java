@@ -1,9 +1,6 @@
 package com.google;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class VideoPlayer {
 
@@ -13,8 +10,12 @@ public class VideoPlayer {
     this.videoLibrary = new VideoLibrary();
   }
 
-  public boolean containsId(final List<Video> list, final String id){
+  private boolean containsId(final List<Video> list, final String id){
     return list.stream().map(Video::getVideoId).filter(id::equals).findFirst().isPresent();
+  }
+
+  private static Video getRandomVideo(List<Video> videos) {
+    return videos.get(new Random().nextInt(videos.size()));
   }
 
   public void numberOfVideos() {
@@ -91,6 +92,11 @@ public class VideoPlayer {
   public void playRandomVideo() {
     List<Video> videos = videoLibrary.getVideos();
 
+    if (videos.isEmpty()) {
+      System.out.println("No videos available");
+      return;
+    }
+
     for(Video video : videos) {
       if (video.isPlaying()) {
         System.out.println("Stopping video: " + video.getTitle());
@@ -98,9 +104,10 @@ public class VideoPlayer {
       }
     }
 
+    Video v1 = getRandomVideo(videos);
 
-
-
+    System.out.println("Playing video: " + v1.getTitle());
+    v1.startPlaying();
   }
 
   public void pauseVideo() {

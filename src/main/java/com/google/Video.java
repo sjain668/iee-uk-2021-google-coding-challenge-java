@@ -10,12 +10,14 @@ class Video {
   private final String videoId;
   private final List<String> tags;
   private boolean isPlaying;
+  private boolean isPaused;
 
   Video(String title, String videoId, List<String> tags) {
     this.title = title;
     this.videoId = videoId;
     this.tags = Collections.unmodifiableList(tags);
     this.isPlaying = false;
+    this.isPaused = false;
   }
 
   /** Returns the title of the video. */
@@ -53,6 +55,18 @@ class Video {
 
   public void startPlaying() {
     this.isPlaying = true;
+  }
+
+  public boolean isPaused() {
+    return this.isPaused;
+  }
+
+  public void pause() {
+    this.isPaused = true;
+  }
+
+  public void unPause() {
+    this.isPaused = false;
   }
 
 }
