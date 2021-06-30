@@ -34,8 +34,6 @@ public class VideoPlayer {
       }
     });
 
-
-
     for(Video video : videos) {
       System.out.print(video.getTitle() + " ");
       System.out.print("(" + video.getVideoId() + ") ");
@@ -43,6 +41,9 @@ public class VideoPlayer {
       System.out.println();
     }
   }
+
+
+
 
   public void playVideo(String videoId) {
     List<Video> videos = videoLibrary.getVideos();
@@ -63,6 +64,9 @@ public class VideoPlayer {
     videoLibrary.getVideo(videoId).startPlaying();
 
   }
+
+
+
 
   public void stopVideo() {
     List<Video> videos = videoLibrary.getVideos();
@@ -89,6 +93,9 @@ public class VideoPlayer {
 
   }
 
+
+
+
   public void playRandomVideo() {
     List<Video> videos = videoLibrary.getVideos();
 
@@ -110,8 +117,34 @@ public class VideoPlayer {
     v1.startPlaying();
   }
 
+
+
+
   public void pauseVideo() {
-    System.out.println("pauseVideo needs implementation");
+    List<Video> videos = videoLibrary.getVideos();
+
+    int noVideosNotPlaying = 0;
+
+    for(Video video : videos) {
+      if (!video.isPlaying()) {
+        noVideosNotPlaying += 1;
+      }
+    }
+
+    if (noVideosNotPlaying == videos.size()) {
+      System.out.println("Cannot pause video: No video is currently playing");
+      return;
+    }
+
+    for(Video video : videos) {
+      if (video.isPlaying() && (!video.isPaused())) {
+        System.out.println("Pausing video: " + video.getTitle());
+        video.pause();
+      } else if (video.isPaused()) {
+        System.out.println("Video already paused: " + video.getTitle());
+      }
+    }
+
   }
 
   public void continueVideo() {
