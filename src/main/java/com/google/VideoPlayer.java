@@ -35,6 +35,18 @@ public class VideoPlayer {
     return returnVal;
   }
 
+  private static boolean isAVideoPlaying(List<Video> videos) {
+
+    boolean returnVal = false;
+
+    for (Video video : videos) {
+      if (video.isPlaying()) {
+        returnVal = true;
+      }
+    }
+    return returnVal;
+  }
+
   public void numberOfVideos() {
     System.out.printf("%s videos in the library%n", videoLibrary.getVideos().size());
   }
@@ -51,6 +63,9 @@ public class VideoPlayer {
         return v1.getTitle().compareTo(v2.getTitle());
       }
     });
+
+
+    System.out.println("Here's a list of all available videos:");
 
     for(Video video : videos) {
       System.out.print(video.getTitle() + " ");
@@ -81,15 +96,26 @@ public class VideoPlayer {
       return;
     }
 
-    for(Video video : videos) {
-      if (video.isPlaying()) {
-        System.out.println("Stopping video: " + video.getTitle());
-        video.stopPlaying();
+
+    if (isAVideoPlaying(videos)) {
+      Video currentlyPlayingVideo = getCurrentlyPlayingVideo(videos);
+      System.out.println("Stopping video: " + currentlyPlayingVideo.getTitle());
+      currentlyPlayingVideo.stopPlaying();
+    }
+
+    if (isAVideoPlaying(videos)) {
+      Video currentlyPlayingVideo = getCurrentlyPlayingVideo(videos);
+      if (currentlyPlayingVideo.isPaused()) {
+        currentlyPlayingVideo.unPause();
       }
     }
 
     System.out.println("Playing video: " + videoLibrary.getVideo(videoId).getTitle());
     videoLibrary.getVideo(videoId).startPlaying();
+    videoLibrary.getVideo(videoId).unPause();
+
+
+
 
   }
 
@@ -208,6 +234,11 @@ public class VideoPlayer {
 
   public void showPlaying() {
     List<Video> videos = videoLibrary.getVideos();
+
+    if (!isAVideoPlaying(videos)) {
+      System.out.println("No video is currently playing");
+      return;
+    }
 
     Video currentlyPlayingVideo = getCurrentlyPlayingVideo(videos);
 
