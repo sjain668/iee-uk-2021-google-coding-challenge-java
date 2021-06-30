@@ -30,4 +30,13 @@ class Video {
   List<String> getTags() {
     return tags;
   }
+
+  public int compareTo(Video v) {
+
+    if (v == null || this == null) {
+      return 0;
+    }
+
+    return this.getTitle().compareTo(v.getTitle());
+  }
 }

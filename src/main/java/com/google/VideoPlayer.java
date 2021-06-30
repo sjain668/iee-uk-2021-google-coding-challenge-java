@@ -2,6 +2,7 @@ package com.google;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class VideoPlayer {
@@ -19,10 +20,12 @@ public class VideoPlayer {
   public void showAllVideos() {
     List<Video> videos = videoLibrary.getVideos();
 
-
-    Collections.sort(videos);
-
-
+    Collections.sort(videos, new Comparator<Video>() {
+      @Override
+      public int compare(Video v1, Video v2) {
+        return v1.getTitle().compareTo(v2.getTitle());
+      }
+    });
 
     for(Video video : videos) {
       System.out.print(video.getTitle() + " ");
@@ -30,8 +33,6 @@ public class VideoPlayer {
       System.out.print(video.getTags());
       System.out.println();
     }
-
-
   }
 
   public void playVideo(String videoId) {
