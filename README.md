@@ -77,3 +77,10 @@ To run all tests, right-click on the root `java` folder and select `Run 'All Tes
 Here is a screen capture showing all those initial steps:
 
 ![Screen capture of the initial steps](running-and-testing-from-intellij.gif)
+
+
+***
+
+# Personal notes
+
+In future, have less methods in VideoPlayer, and move relevant Video getters and maybe booleans to VideoLibrary, to declutter the class and remove need to pass video list as arguments?
