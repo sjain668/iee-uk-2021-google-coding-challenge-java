@@ -1,7 +1,6 @@
 package com.google;
 
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.ArrayList;
 
 public class VideoPlayer {
@@ -13,13 +12,13 @@ public class VideoPlayer {
     this.videoLibrary = new VideoLibrary();
   }
 
-  private static boolean containsId(final List<Video> videos, final String id){
-    return videos.stream()
-            .map(Video::getVideoId)
-            .filter(id::equals)
-            .findFirst()
-            .isPresent();
-  }
+//  private static boolean containsId(final List<Video> videos, final String id){
+//    return videos.stream()
+//            .map(Video::getVideoId)
+//            .filter(id::equals)
+//            .findFirst()
+//            .isPresent();
+//  }
 
   private static Video getRandomVideo(List<Video> videos) {
     return videos.get(new Random().nextInt(videos.size()));
@@ -37,7 +36,8 @@ public class VideoPlayer {
     return returnVal;
   }
 
-  private static boolean isAVideoPlaying(List<Video> videos) {
+
+  private static boolean aVideoIsPlaying(List<Video> videos) {
 
     boolean returnVal = false;
 
@@ -48,6 +48,60 @@ public class VideoPlayer {
     }
     return returnVal;
   }
+
+  private boolean playlistExists(String playlistName) {
+
+    boolean returnVal = false;
+
+    for (Playlist playlist : playlists) {
+      if (playlist.getName().equalsIgnoreCase(playlistName)) {
+        returnVal = true;
+      }
+    }
+    return returnVal;
+  }
+
+  private boolean videoExists(List<Video> videos, String videoId) {
+
+    boolean returnVal = false;
+
+    for (Video video : videos) {
+      if (video.getVideoId().equals(videoId)) {
+        returnVal = true;
+      }
+    }
+    return returnVal;
+  }
+
+
+  private boolean videoExistsInPlaylist(String playlistName, String videoId) {
+
+    boolean returnVal = false;
+    Playlist queriedPlaylist = getPlaylistByName(playlistName);
+
+    for (Video video : queriedPlaylist.getVideos()) {
+      if (video.getVideoId() == videoId) {
+        returnVal = true;
+      }
+    }
+    return returnVal;
+  }
+
+
+
+  private Playlist getPlaylistByName(String playlistName) {
+
+    Playlist queriedPlaylist = new Playlist("null");
+
+    for (Playlist playlist : playlists) {
+      if (playlist.getName().equalsIgnoreCase(playlistName)) {
+        queriedPlaylist = playlist;
+      }
+    }
+    return queriedPlaylist;
+  }
+
+
 
   public void numberOfVideos() {
     System.out.printf("%s videos in the library%n", videoLibrary.getVideos().size());
@@ -93,19 +147,19 @@ public class VideoPlayer {
   public void playVideo(String videoId) {
     List<Video> videos = videoLibrary.getVideos();
 
-    if (!(containsId(videos, videoId))) {
+    if (!(videoExists(videos, videoId))) {
       System.out.println("Cannot play video: Video does not exist");
       return;
     }
 
 
-    if (isAVideoPlaying(videos)) {
+    if (aVideoIsPlaying(videos)) {
       Video currentlyPlayingVideo = getCurrentlyPlayingVideo(videos);
       System.out.println("Stopping video: " + currentlyPlayingVideo.getTitle());
       currentlyPlayingVideo.stopPlaying();
     }
 
-    if (isAVideoPlaying(videos)) {
+    if (aVideoIsPlaying(videos)) {
       Video currentlyPlayingVideo = getCurrentlyPlayingVideo(videos);
       if (currentlyPlayingVideo.isPaused()) {
         currentlyPlayingVideo.unPause();
@@ -126,16 +180,8 @@ public class VideoPlayer {
 
   public void stopVideo() {
     List<Video> videos = videoLibrary.getVideos();
-
-    int noVideosNotPlaying = 0;
-
-    for(Video video : videos) {
-      if (!video.isPlaying()) {
-        noVideosNotPlaying += 1;
-      }
-    }
-
-    if (noVideosNotPlaying == videos.size()) {
+    
+    if (!aVideoIsPlaying(videos)) {
       System.out.println("Cannot stop video: No video is currently playing");
       return;
     }
@@ -178,16 +224,8 @@ public class VideoPlayer {
 
   public void pauseVideo() {
     List<Video> videos = videoLibrary.getVideos();
-
-    int noVideosNotPlaying = 0;
-
-    for(Video video : videos) {
-      if (!video.isPlaying()) {
-        noVideosNotPlaying += 1;
-      }
-    }
-
-    if (noVideosNotPlaying == videos.size()) {
+    
+    if (!aVideoIsPlaying(videos)) {
       System.out.println("Cannot pause video: No video is currently playing");
       return;
     }
@@ -206,15 +244,7 @@ public class VideoPlayer {
   public void continueVideo() {
     List<Video> videos = videoLibrary.getVideos();
 
-    int noVideosNotPlaying = 0;
-
-    for(Video video : videos) {
-      if (!video.isPlaying()) {
-        noVideosNotPlaying += 1;
-      }
-    }
-
-    if (noVideosNotPlaying == videos.size()) {
+    if (!aVideoIsPlaying(videos)) {
       System.out.println("Cannot continue video: No video is currently playing");
       return;
     }
@@ -237,7 +267,7 @@ public class VideoPlayer {
   public void showPlaying() {
     List<Video> videos = videoLibrary.getVideos();
 
-    if (!isAVideoPlaying(videos)) {
+    if (!aVideoIsPlaying(videos)) {
       System.out.println("No video is currently playing");
       return;
     }
@@ -268,11 +298,9 @@ public class VideoPlayer {
 
   public void createPlaylist(String playlistName) {
 
-    for (Playlist playlist : playlists) {
-      if (playlist.getName().equalsIgnoreCase(playlistName)) {
-        System.out.println("Cannot create playlist: A playlist with the same name already exists");
-        return;
-      }
+    if (playlistExists(playlistName)) {
+      System.out.println("Cannot create playlist: A playlist with the same name already exists");
+      return;
     }
 
     playlists.add(new Playlist(playlistName));
@@ -281,7 +309,28 @@ public class VideoPlayer {
   }
 
   public void addVideoToPlaylist(String playlistName, String videoId) {
-    System.out.println("addVideoToPlaylist needs implementation");
+    List<Video> videos = videoLibrary.getVideos();
+
+    if (!playlistExists(playlistName)) {
+      System.out.println("Cannot add video to " + playlistName + ": Playlist does not exist");
+      return;
+    }
+
+    if (!videoExists(videos, videoId)) {
+      System.out.println("Cannot add video to " + playlistName + ": Video does not exist");
+      return;
+    }
+
+    if (videoExistsInPlaylist(playlistName, videoId)) {
+      System.out.println("Cannot add video to " + playlistName + ": Video already added");
+      return;
+    }
+
+    Playlist playlistToBeUpdated = getPlaylistByName(playlistName);
+    Video videoToBeAdded = videoLibrary.getVideo(videoId);
+    playlistToBeUpdated.addVideo(videoToBeAdded);
+    System.out.println("Added video to " + playlistName + ": " + videoToBeAdded.getTitle());
+
   }
 
   public void showAllPlaylists() {

@@ -24,4 +24,8 @@ public class Playlist {
         return this.videos;
     }
 
+    public void addVideo(Video video) {
+        this.videos.add(video);
+    }
+
 }
