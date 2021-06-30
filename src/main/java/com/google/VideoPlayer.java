@@ -80,7 +80,12 @@ public class VideoPlayer {
     Playlist queriedPlaylist = getPlaylistByName(playlistName);
 
     for (Video video : queriedPlaylist.getVideos()) {
-      if (video.getVideoId() == videoId) {
+      System.out.println(video.getTitle());
+      // ISSUE IS AT BLOE LINE. NOT ENTERING IF STATEMENT
+
+
+
+      if (video.getVideoId().equals(videoId)) {
         returnVal = true;
       }
     }
@@ -91,7 +96,7 @@ public class VideoPlayer {
 
   private Playlist getPlaylistByName(String playlistName) {
 
-    Playlist queriedPlaylist = new Playlist("null");
+    Playlist queriedPlaylist = null;
 
     for (Playlist playlist : playlists) {
       if (playlist.getName().equalsIgnoreCase(playlistName)) {
