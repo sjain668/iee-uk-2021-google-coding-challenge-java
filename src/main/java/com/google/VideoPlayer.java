@@ -13,6 +13,10 @@ public class VideoPlayer {
     this.videoLibrary = new VideoLibrary();
   }
 
+  public boolean containsId(final List<Video> list, final String id){
+    return list.stream().map(Video::getVideoId).filter(id::equals).findFirst().isPresent();
+  }
+
   public void numberOfVideos() {
     System.out.printf("%s videos in the library%n", videoLibrary.getVideos().size());
   }
@@ -42,6 +46,11 @@ public class VideoPlayer {
   public void playVideo(String videoId) {
     List<Video> videos = videoLibrary.getVideos();
 
+    if (!(containsId(videos, videoId))) {
+      System.out.println("Cannot play video: Video does not exist");
+      return;
+    }
+
     for(Video video : videos) {
       if (video.isPlaying()) {
         System.out.println("Stopping video: " + video.getTitle());
@@ -55,11 +64,43 @@ public class VideoPlayer {
   }
 
   public void stopVideo() {
-    System.out.println("stopVideo needs implementation");
+    List<Video> videos = videoLibrary.getVideos();
+
+    int noVideosNotPlaying = 0;
+
+    for(Video video : videos) {
+      if (!video.isPlaying()) {
+        noVideosNotPlaying += 1;
+      }
+    }
+
+    if (noVideosNotPlaying == videos.size()) {
+      System.out.println("Cannot stop video: No video is currently playing");
+      return;
+    }
+
+    for(Video video : videos) {
+      if (video.isPlaying()) {
+        System.out.println("Stopping video: " + video.getTitle());
+        video.stopPlaying();
+      }
+    }
+
   }
 
   public void playRandomVideo() {
-    System.out.println("playRandomVideo needs implementation");
+    List<Video> videos = videoLibrary.getVideos();
+
+    for(Video video : videos) {
+      if (video.isPlaying()) {
+        System.out.println("Stopping video: " + video.getTitle());
+        video.stopPlaying();
+      }
+    }
+
+
+
+
   }
 
   public void pauseVideo() {
