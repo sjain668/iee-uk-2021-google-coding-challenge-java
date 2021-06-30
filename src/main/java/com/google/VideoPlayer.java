@@ -80,11 +80,6 @@ public class VideoPlayer {
     Playlist queriedPlaylist = getPlaylistByName(playlistName);
 
     for (Video video : queriedPlaylist.getVideos()) {
-      System.out.println(video.getTitle());
-      // ISSUE IS AT BLOE LINE. NOT ENTERING IF STATEMENT
-
-
-
       if (video.getVideoId().equals(videoId)) {
         returnVal = true;
       }
@@ -370,8 +365,34 @@ public class VideoPlayer {
 
 
   public void removeFromPlaylist(String playlistName, String videoId) {
-    System.out.println("removeFromPlaylist needs implementation");
+    List<Video> videos = videoLibrary.getVideos();
+
+
+    if (!(videoExists(videos, videoId))) {
+      System.out.println("Cannot remove video from " + playlistName + ": Video does not exist");
+      return;
+    }
+
+    if (!videoExistsInPlaylist(playlistName, videoId)) {
+      System.out.println("Cannot remove video from " + playlistName + ": Video is not in playlist");
+      return;
+    }
+
+    if (!playlistExists(playlistName)) {
+      System.out.println("Cannot remove video from " + playlistName + ": Playlist does not exist");
+      return;
+    }
+
+    Playlist playlistToRemoveFrom = getPlaylistByName(playlistName);
+    playlistToRemoveFrom.removeVideo(videoLibrary.getVideo(videoId));
+    System.out.println("Removed video from " + playlistName + ": " + playlistToRemoveFrom.getName());
+
   }
+
+
+
+
+
 
   public void clearPlaylist(String playlistName) {
     System.out.println("clearPlaylist needs implementation");

@@ -28,6 +28,10 @@ public class Playlist {
         this.videos.add(video);
     }
 
+    public void removeVideo(Video video) {
+        this.videos.remove(video);
+    }
+
     public void printVideos() {
 
         if (videos.isEmpty()) {
