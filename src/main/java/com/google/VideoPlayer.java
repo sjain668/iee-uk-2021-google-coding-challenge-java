@@ -2,10 +2,12 @@ package com.google;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.ArrayList;
 
 public class VideoPlayer {
 
   private final VideoLibrary videoLibrary;
+  private ArrayList<Playlist> playlists = new ArrayList<Playlist>();
 
   public VideoPlayer() {
     this.videoLibrary = new VideoLibrary();
@@ -265,7 +267,17 @@ public class VideoPlayer {
   }
 
   public void createPlaylist(String playlistName) {
-    System.out.println("createPlaylist needs implementation");
+
+    for (Playlist playlist : playlists) {
+      if (playlist.getName().equalsIgnoreCase(playlistName)) {
+        System.out.println("Cannot create playlist: A playlist with the same name already exists");
+        return;
+      }
+    }
+
+    playlists.add(new Playlist(playlistName));
+    System.out.println("Successfully created new playlist: " + playlistName);
+
   }
 
   public void addVideoToPlaylist(String playlistName, String videoId) {
