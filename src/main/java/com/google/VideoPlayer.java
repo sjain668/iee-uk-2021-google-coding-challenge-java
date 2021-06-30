@@ -17,6 +17,8 @@ public class VideoPlayer {
     System.out.printf("%s videos in the library%n", videoLibrary.getVideos().size());
   }
 
+
+
   public void showAllVideos() {
     List<Video> videos = videoLibrary.getVideos();
 
@@ -27,6 +29,8 @@ public class VideoPlayer {
       }
     });
 
+
+
     for(Video video : videos) {
       System.out.print(video.getTitle() + " ");
       System.out.print("(" + video.getVideoId() + ") ");
@@ -36,7 +40,18 @@ public class VideoPlayer {
   }
 
   public void playVideo(String videoId) {
-    System.out.println("playVideo needs implementation");
+    List<Video> videos = videoLibrary.getVideos();
+
+    for(Video video : videos) {
+      if (video.isPlaying()) {
+        System.out.println("Stopping video: " + video.getTitle());
+        video.stopPlaying();
+      }
+    }
+
+    System.out.println("Playing video: " + videoLibrary.getVideo(videoId).getTitle());
+    videoLibrary.getVideo(videoId).startPlaying();
+
   }
 
   public void stopVideo() {

@@ -9,11 +9,13 @@ class Video {
   private final String title;
   private final String videoId;
   private final List<String> tags;
+  private boolean isPlaying;
 
   Video(String title, String videoId, List<String> tags) {
     this.title = title;
     this.videoId = videoId;
     this.tags = Collections.unmodifiableList(tags);
+    this.isPlaying = false;
   }
 
   /** Returns the title of the video. */
@@ -39,4 +41,18 @@ class Video {
 
     return this.getTitle().compareTo(v.getTitle());
   }
+
+
+  public boolean isPlaying() {
+    return this.isPlaying;
+  }
+
+  public void stopPlaying() {
+    this.isPlaying = false;
+  }
+
+  public void startPlaying() {
+    this.isPlaying = true;
+  }
+
 }
