@@ -1,4 +1,4 @@
-# Youtube Challenge - Java
+﻿# Youtube Challenge - Java
 The Java Youtube Challenge uses Java 11, Junit 5.4 and Maven.
 
 NOTE: **Please do not edit videos.txt as it will cause tests to break. There is no need to modify this file to complete this challenge.**
@@ -84,3 +84,62 @@ Here is a screen capture showing all those initial steps:
 # Personal notes
 
 In future, have less methods in VideoPlayer, and move relevant Video getters and maybe booleans to VideoLibrary, to declutter the class and remove need to pass video list as arguments?
+
+
+# Notes from debrief:
+
+Much clearer class responsibilities needed - e.g. VideoPlayer should handle pausing and playing - the video doesn't need to know if its paused.
+
+If you can encapsulate something in a class instead of just using a data structure, thats better.
+I did this for Playlist, but maybe could have done it for **Playlists**?
+
+
+Responsibilities:
+
+- Video should be a frozen object. Video should not be playing itself (Video player plays a video)
+
+- Video player knows about video library and playlist library
+
+- Currently playing video and current state (e.g. Playing, Paused) should be kept together, for example in a 'CurrentVideo' structure.
+
+
+Refactor common parts:
+
+- Asking if the user wants to play the search result is the same for search with tag and without.
+- So, dont duplicate code. For any repeatable code, factor into a method and reference that.
+- I feel did this in most areas but may have missed some areas that could be refactored.
+- I could have used final Strings and printf for messages with similar structures, or made a function.
+- The code is efficient, easier to read, easier to debug, easier for colleagues to give feedback on.
+
+
+Test code throughout:
+
+- As well as provided tests, manually test code to ensure it works in different scnearios
+- Adding tests for each new method is important not only to test that your code will work once implemented (TDD) but als to future proof any future changes, to prevent regressions / potential bugs.
+
+
+No one perfect solution:
+- This challenge was sent to 100 Google engineers to solve.
+- Various solutions will appear at https://github.com/internship-experience-uk/google-code-sample in a few days.
+
+What I learnt:
+- Better use of data structures
+- For each loops, and when to not use them.
+- More on how to use Assert / JUnit testing 
+- Practiced: splitting repeatable code into private methods
+- Practiced: Encapsulating an object into a new class, instead of data structure.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
